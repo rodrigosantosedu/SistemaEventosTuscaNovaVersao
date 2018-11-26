@@ -10,8 +10,8 @@ public class ConectaBanco {
     public ResultSet rs;//public para acessar em outras classes
     private final String driver = "oracle.jdbc.driver.OracleDriver";
     private final String caminho = "jdbc:oracle:thin:@grad.icmc.usp.br:15215:orcl";
-    private final String usuario = "G7143510";
-    private final String senha = "G7143510";
+    private final String usuario = "x;
+    private final String senha = "x";
     public Connection conn;//public para acessar em outras classes
     
     public void conexao(){ // metodo responsavel por realizar a conexao com o banco oracle
