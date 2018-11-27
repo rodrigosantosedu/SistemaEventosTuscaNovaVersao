@@ -8,10 +8,14 @@ package InterfaceGrafica;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import utilitarios.ConectaBanco;
+import utilitarios.ModeloTabela;
 
 /**
  *
@@ -22,6 +26,7 @@ public class FrmAtracao extends javax.swing.JFrame {
     public FrmAtracao() {
         initComponents();
         conecta.conexao();
+        PreencherTabela("select *from atracao");
     }
 
     /**
@@ -117,13 +122,13 @@ public class FrmAtracao extends javax.swing.JFrame {
 
         jTableAtracao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jTableAtracao);
@@ -271,10 +276,33 @@ public class FrmAtracao extends javax.swing.JFrame {
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonSairActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+    
+    public void PreencherTabela(String SQL){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[]{"CNPJ","NOME"}; // aqui são os nomes que irão aparecer nas colunas da tabela
+        conecta.executaSQL(SQL);
+        try {
+            conecta.rs.first();
+            do{
+                dados.add(new Object[]{conecta.rs.getString("CNPJ"),conecta.rs.getString("NOME")});
+            }while(conecta.rs.next());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
+        }
+        
+        ModeloTabela modelo = new ModeloTabela(dados,colunas);
+        jTableAtracao.setModel(modelo);
+        jTableAtracao.getColumnModel().getColumn(0).setPreferredWidth(217);
+        jTableAtracao.getColumnModel().getColumn(0).setResizable(false);
+        jTableAtracao.getColumnModel().getColumn(1).setPreferredWidth(217);
+        jTableAtracao.getColumnModel().getColumn(1).setResizable(false);
+        jTableAtracao.getTableHeader().setReorderingAllowed(false);
+        jTableAtracao.setAutoResizeMode(jTableAtracao.AUTO_RESIZE_OFF);
+        jTableAtracao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
