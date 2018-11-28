@@ -9,11 +9,15 @@ package InterfaceGrafica;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import utilitarios.ConectaBanco;
 import utilitarios.ModeloTabela;
 
@@ -21,12 +25,22 @@ import utilitarios.ModeloTabela;
  *
  * @author rodrigo
  */
-public class FrmAtracao extends javax.swing.JFrame {
+public class FrmEvento extends javax.swing.JFrame {
     ConectaBanco conecta = new ConectaBanco();
-    public FrmAtracao() {
+    public FrmEvento() {
         initComponents();
         conecta.conexao();
-        PreencherTabela("select *from atracao");
+        PreencherTabela("select *from evento");
+        conecta.executaSQL("select endereco from local");
+        jComboBoxLocal.removeAllItems();
+        try{
+            conecta.rs.first();
+            do{
+                jComboBoxLocal.addItem(conecta.rs.getString("endereco"));
+            }while(conecta.rs.next());
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(rootPane,"Erro ao preencher dropdown enderecos"+ex.getMessage());
+        }
     }
 
     /**
@@ -38,19 +52,43 @@ public class FrmAtracao extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
-        jTextFieldCnpj = new javax.swing.JTextField();
+        jTextFieldData = new javax.swing.JTextField();
+        try{
+            javax.swing.text.MaskFormatter data= new javax.swing.text.MaskFormatter("##/##/####");
+            jTextFieldData = new javax.swing.JFormattedTextField(data);
+        }
+        catch (Exception e){
+        }try{
+            javax.swing.text.MaskFormatter data= new javax.swing.text.MaskFormatter("##/##/####");
+            jTextFieldData = new javax.swing.JFormattedTextField(data);
+        }
+        catch (Exception e){
+        }
         jButtonNovo = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableAtracao = new javax.swing.JTable();
+        jTableEvento = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldNumPessoas = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBoxLocal = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
+
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Atração");
@@ -59,7 +97,7 @@ public class FrmAtracao extends javax.swing.JFrame {
 
         jLabel2.setText("Nome");
 
-        jLabel3.setText("CNPJ");
+        jLabel3.setText("Data");
 
         jTextFieldNome.setBackground(new java.awt.Color(254, 254, 254));
         jTextFieldNome.setEnabled(false);
@@ -69,8 +107,8 @@ public class FrmAtracao extends javax.swing.JFrame {
             }
         });
 
-        jTextFieldCnpj.setBackground(new java.awt.Color(254, 254, 254));
-        jTextFieldCnpj.setEnabled(false);
+        jTextFieldData.setBackground(new java.awt.Color(254, 254, 254));
+        jTextFieldData.setEnabled(false);
 
         jButtonNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
         jButtonNovo.setToolTipText("Novo");
@@ -120,7 +158,7 @@ public class FrmAtracao extends javax.swing.JFrame {
             }
         });
 
-        jTableAtracao.setModel(new javax.swing.table.DefaultTableModel(
+        jTableEvento.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -131,7 +169,21 @@ public class FrmAtracao extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTableAtracao);
+        jScrollPane1.setViewportView(jTableEvento);
+
+        jLabel4.setText("Número de Pessoas");
+
+        jTextFieldNumPessoas.setBackground(new java.awt.Color(254, 254, 254));
+        jTextFieldNumPessoas.setEnabled(false);
+        jTextFieldNumPessoas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNumPessoasActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Local");
+
+        jComboBoxLocal.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -140,26 +192,39 @@ public class FrmAtracao extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jButtonNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(14, 14, 14)
-                                .addComponent(jButtonEdit)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldData)
+                                    .addComponent(jTextFieldNome)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldNumPessoas, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextFieldCnpj)
-                            .addComponent(jTextFieldNome)))
+                                .addComponent(jComboBoxLocal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -171,22 +236,30 @@ public class FrmAtracao extends javax.swing.JFrame {
                     .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextFieldCnpj)
+                    .addComponent(jTextFieldData)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNumPessoas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonNovo, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(jButtonSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxLocal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonSalvar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonNovo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         jLabel1.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
-        jLabel1.setText("Formulário de Cadastro de Atrações");
+        jLabel1.setText("Formulário de Cadastro de Eventos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,7 +283,7 @@ public class FrmAtracao extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(514, 371));
+        setSize(new java.awt.Dimension(514, 466));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -219,10 +292,13 @@ public class FrmAtracao extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldNomeActionPerformed
 
     private void jButtonNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoActionPerformed
-        jTextFieldCnpj.setText("");
+        jTextFieldData.setText("");
         jTextFieldNome.setText("");
-        jTextFieldCnpj.setEnabled(true);
+        jTextFieldNumPessoas.setText("");
+        jTextFieldData.setEnabled(true);
         jTextFieldNome.setEnabled(true);
+        jTextFieldNumPessoas.setEnabled(true);
+        jComboBoxLocal.setEnabled(true);
         jButtonEdit.setEnabled(true);
         jButtonSalvar.setEnabled(true);
         jButtonDelete.setEnabled(true);
@@ -241,17 +317,21 @@ public class FrmAtracao extends javax.swing.JFrame {
 
         try {
             //prepara a query sql
-            PreparedStatement pst = conecta.conn.prepareStatement("insert into atracao(CNPJ,NOME)values(?,?)");
-            pst.setString(1, jTextFieldCnpj.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
-            pst.setString(2, jTextFieldNome.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
+            PreparedStatement pst = conecta.conn.prepareStatement("insert into evento(NOME,DATA,NUMEROPESSOAS,LOCAL)values(?,?,?,?)");
+            pst.setString(1, jTextFieldNome.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
+            pst.setString(2, jTextFieldData.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
+            pst.setString(3, jTextFieldNumPessoas.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
+            conecta.executaSQL(" select endereco from local where endereco = " + jComboBoxLocal.getSelectedItem());
+            conecta.rs.first();
+            pst.setString(4,conecta.rs.getString("endereco"));
             pst.executeUpdate(); // da o "Commit" , olhar depois se é isso mesmo
             JOptionPane.showMessageDialog(rootPane, "Salvo com Sucesso!\n ");
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(rootPane, "erro ao fazer inserção!\n ");
         }
-        jTextFieldCnpj.setText("");
+        jTextFieldData.setText("");
         jTextFieldNome.setText("");
-        jTextFieldCnpj.setEnabled(false);
+        jTextFieldData.setEnabled(false);
         jTextFieldNome.setEnabled(false);
         jButtonNovo.setEnabled(true);
         jButtonEdit.setEnabled(false);
@@ -260,11 +340,11 @@ public class FrmAtracao extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        conecta.executaSQL("delete from atracao where cnpj='"+jTextFieldCnpj.getText()+"'");
+        conecta.executaSQL("delete from atracao where cnpj='"+jTextFieldData.getText()+"'");
         JOptionPane.showMessageDialog(rootPane, "Excluido com Sucesso!\n ");
-        jTextFieldCnpj.setText("");
+        jTextFieldData.setText("");
         jTextFieldNome.setText("");
-        jTextFieldCnpj.setEnabled(false);
+        jTextFieldData.setEnabled(false);
         jTextFieldNome.setEnabled(false);
         jButtonNovo.setEnabled(true);
         jButtonEdit.setEnabled(false);
@@ -276,29 +356,37 @@ public class FrmAtracao extends javax.swing.JFrame {
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonSairActionPerformed
+
+    private void jTextFieldNumPessoasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumPessoasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNumPessoasActionPerformed
     
     public void PreencherTabela(String SQL){
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"CNPJ","NOME"}; // aqui são os nomes que irão aparecer nas colunas da tabela
+        String[] colunas = new String[]{"Nome","Data","NumPessoas","local"}; // aqui são os nomes que irão aparecer nas colunas da tabela
         conecta.executaSQL(SQL);
         try {
             conecta.rs.first();
             do{
-                dados.add(new Object[]{conecta.rs.getString("CNPJ"),conecta.rs.getString("NOME")});
+                dados.add(new Object[]{conecta.rs.getString("nome"),conecta.rs.getDate("data"),conecta.rs.getInt("numeropessoas"),conecta.rs.getString("local")});
             }while(conecta.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
         }
         
         ModeloTabela modelo = new ModeloTabela(dados,colunas);
-        jTableAtracao.setModel(modelo);
-        jTableAtracao.getColumnModel().getColumn(0).setPreferredWidth(217);
-        jTableAtracao.getColumnModel().getColumn(0).setResizable(false);
-        jTableAtracao.getColumnModel().getColumn(1).setPreferredWidth(217);
-        jTableAtracao.getColumnModel().getColumn(1).setResizable(false);
-        jTableAtracao.getTableHeader().setReorderingAllowed(false);
-        jTableAtracao.setAutoResizeMode(jTableAtracao.AUTO_RESIZE_OFF);
-        jTableAtracao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTableEvento.setModel(modelo);
+        jTableEvento.getColumnModel().getColumn(0).setPreferredWidth(105);
+        jTableEvento.getColumnModel().getColumn(0).setResizable(false);
+        jTableEvento.getColumnModel().getColumn(1).setPreferredWidth(90);
+        jTableEvento.getColumnModel().getColumn(1).setResizable(false);
+        jTableEvento.getColumnModel().getColumn(2).setPreferredWidth(70);
+        jTableEvento.getColumnModel().getColumn(2).setResizable(false);
+        jTableEvento.getColumnModel().getColumn(3).setPreferredWidth(206);
+        jTableEvento.getColumnModel().getColumn(3).setResizable(false);
+        jTableEvento.getTableHeader().setReorderingAllowed(false);
+        jTableEvento.setAutoResizeMode(jTableEvento.AUTO_RESIZE_OFF);
+        jTableEvento.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     
@@ -317,20 +405,20 @@ public class FrmAtracao extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmAtracao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmEvento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmAtracao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmEvento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmAtracao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmEvento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmAtracao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmEvento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmAtracao().setVisible(true);
+                new FrmEvento().setVisible(true);
             }
         });
     }
@@ -341,13 +429,19 @@ public class FrmAtracao extends javax.swing.JFrame {
     private javax.swing.JButton jButtonNovo;
     private javax.swing.JButton jButtonSair;
     private javax.swing.JButton jButtonSalvar;
+    private javax.swing.JComboBox jComboBoxLocal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableAtracao;
-    private javax.swing.JTextField jTextFieldCnpj;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableEvento;
+    private javax.swing.JTextField jTextFieldData;
     private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextField jTextFieldNumPessoas;
     // End of variables declaration//GEN-END:variables
 }
