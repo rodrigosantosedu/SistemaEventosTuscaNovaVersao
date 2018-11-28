@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package InterfaceGrafica;
+package visao;
 
+import Modelo.ModeloEvento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,26 +19,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import utilitarios.ConectaBanco;
-import utilitarios.ModeloTabela;
+import controle.ConectaBanco;
+import Modelo.ModeloTabela;
+import controle.ControleEvento;
 
 /**
  *
  * @author rodrigo
  */
 public class FrmEvento extends javax.swing.JFrame {
-    ConectaBanco conecta = new ConectaBanco();
+    ConectaBanco conectaEvento = new ConectaBanco();
     public FrmEvento() {
         initComponents();
-        conecta.conexao();
+        conectaEvento.conexao();
         PreencherTabela("select *from evento");
-        conecta.executaSQL("select endereco from local");
+        conectaEvento.executaSQL("select endereco from local");
         jComboBoxLocal.removeAllItems();
         try{
-            conecta.rs.first();
+            conectaEvento.rs.first();
             do{
-                jComboBoxLocal.addItem(conecta.rs.getString("endereco"));
-            }while(conecta.rs.next());
+                jComboBoxLocal.addItem(conectaEvento.rs.getString("endereco"));
+            }while(conectaEvento.rs.next());
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(rootPane,"Erro ao preencher dropdown enderecos"+ex.getMessage());
         }
@@ -316,31 +318,22 @@ public class FrmEvento extends javax.swing.JFrame {
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
 
         try {
-            //prepara a query sql
-            PreparedStatement pst = conecta.conn.prepareStatement("insert into evento(NOME,DATA,NUMEROPESSOAS,LOCAL)values(?,?,?,?)");
-            pst.setString(1, jTextFieldNome.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
-            pst.setString(2, jTextFieldData.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
-            pst.setString(3, jTextFieldNumPessoas.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
-            conecta.executaSQL(" select endereco from local where endereco = " + jComboBoxLocal.getSelectedItem());
-            conecta.rs.first();
-            pst.setString(4,conecta.rs.getString("endereco"));
-            pst.executeUpdate(); // da o "Commit" , olhar depois se é isso mesmo
-            JOptionPane.showMessageDialog(rootPane, "Salvo com Sucesso!\n ");
+            ModeloEvento evento = new ModeloEvento();
+            evento.setNome(jTextFieldNome.getText());
+            evento.setData(jTextFieldData.getText());
+            evento.setNumero_pessoas(jTextFieldNumPessoas.getText());
+            conectaEvento.executaSQL("select endereco from local where endereco='"+jComboBoxLocal.getSelectedItem()+"'");
+            conectaEvento.rs.first();
+            evento.setLocal(conectaEvento.rs.getNString("endereco"));
+            ControleEvento control_evento = new ControleEvento();
+            control_evento.InserirEvento(evento);
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(rootPane, "erro ao fazer inserção!\n ");
+            
         }
-        jTextFieldData.setText("");
-        jTextFieldNome.setText("");
-        jTextFieldData.setEnabled(false);
-        jTextFieldNome.setEnabled(false);
-        jButtonNovo.setEnabled(true);
-        jButtonEdit.setEnabled(false);
-        jButtonSalvar.setEnabled(false);
-        jButtonDelete.setEnabled(false);
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        conecta.executaSQL("delete from atracao where cnpj='"+jTextFieldData.getText()+"'");
+        conectaEvento.executaSQL("delete from atracao where cnpj='"+jTextFieldData.getText()+"'");
         JOptionPane.showMessageDialog(rootPane, "Excluido com Sucesso!\n ");
         jTextFieldData.setText("");
         jTextFieldNome.setText("");
@@ -364,12 +357,12 @@ public class FrmEvento extends javax.swing.JFrame {
     public void PreencherTabela(String SQL){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[]{"Nome","Data","NumPessoas","local"}; // aqui são os nomes que irão aparecer nas colunas da tabela
-        conecta.executaSQL(SQL);
+        conectaEvento.executaSQL(SQL);
         try {
-            conecta.rs.first();
+            conectaEvento.rs.first();
             do{
-                dados.add(new Object[]{conecta.rs.getString("nome"),conecta.rs.getDate("data"),conecta.rs.getInt("numeropessoas"),conecta.rs.getString("local")});
-            }while(conecta.rs.next());
+                dados.add(new Object[]{conectaEvento.rs.getString("nome"),conectaEvento.rs.getDate("data"),conectaEvento.rs.getInt("numeropessoas"),conectaEvento.rs.getString("local")});
+            }while(conectaEvento.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
         }

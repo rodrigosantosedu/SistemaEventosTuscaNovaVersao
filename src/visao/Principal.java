@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package InterfaceGrafica;
+package visao;
 
-import utilitarios.ConectaBanco;
+import controle.ConectaBanco;
 
 /**
  *
