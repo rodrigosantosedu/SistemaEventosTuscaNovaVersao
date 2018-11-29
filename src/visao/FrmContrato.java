@@ -6,9 +6,14 @@
 
 package visao;
 
+import Modelo.ModeloTabela;
 import controle.ConectaBanco;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -20,7 +25,7 @@ public class FrmContrato extends javax.swing.JFrame {
     public FrmContrato() {
         initComponents();
         conectaContrato.conexao();
-        //PreencherTabela("select *from contrato");
+        PreencherTabela("select *from contrato");
         conectaContrato.executaSQL("select nome,data from evento");
         jComboBoxAtracao.removeAllItems();
         try{
@@ -46,7 +51,41 @@ public class FrmContrato extends javax.swing.JFrame {
         }
         
     }
-
+    
+    public void PreencherTabela(String SQL){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[]{"Atracao","EventoNome","EventoData","ValorCache"}; // aqui são os nomes que irão aparecer nas colunas da tabela
+        conectaContrato.executaSQL(SQL);
+        try {
+            conectaContrato.rs.first();
+            do{
+                dados.add(new Object[]{conectaContrato.rs.getString("ATRACAO"),conectaContrato.rs.getString("EVENTONOME"),conectaContrato.rs.getString("EVENTODATA"),conectaContrato.rs.getString("VALORCACHE")});
+            }while(conectaContrato.rs.next());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
+        } 
+        //try {
+         //   conectaEvento.executaSQL("select count(*) from evento");
+         //   conectaEvento.rs.first();
+         //   jLabelNumEventos.setText("O número de eventos é: " + conectaEvento.rs.getNString(1));
+            //JOptionPane.showMessageDialog(rootPane, conecta.rs.getNString(1));
+        //} catch (SQLException ex) {
+      //      Logger.getLogger(FrmEvento.class.getName()).log(Level.SEVERE, null, ex);
+      ///  }
+    ModeloTabela modelo = new ModeloTabela(dados,colunas);
+        jTableContrato.setModel(modelo);
+        jTableContrato.getColumnModel().getColumn(0).setPreferredWidth(125);
+        //jTableContrato.getColumnModel().getColumn(0).setResizable(false);
+       jTableContrato.getColumnModel().getColumn(1).setPreferredWidth(125);
+       // jTableContrato.getColumnModel().getColumn(1).setResizable(false);
+       jTableContrato.getColumnModel().getColumn(2).setPreferredWidth(125);
+       // jTableContrato.getColumnModel().getColumn(2).setResizable(false);
+       jTableContrato.getColumnModel().getColumn(3).setPreferredWidth(125);
+       // jTableContrato.getColumnModel().getColumn(3).setResizable(false);
+        jTableContrato.getTableHeader().setReorderingAllowed(false);
+        jTableContrato.setAutoResizeMode(jTableContrato.AUTO_RESIZE_OFF);
+        jTableContrato.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

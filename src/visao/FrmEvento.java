@@ -84,7 +84,9 @@ public class FrmEvento extends javax.swing.JFrame {
         jTextFieldNumPessoas = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jComboBoxLocal = new javax.swing.JComboBox();
+        jLabelNumEventos = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabelNumAtracoes = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -231,7 +233,10 @@ public class FrmEvento extends javax.swing.JFrame {
                                 .addComponent(jComboBoxLocal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1)))
+                        .addComponent(jScrollPane1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabelNumEventos, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -262,6 +267,8 @@ public class FrmEvento extends javax.swing.JFrame {
                     .addComponent(jButtonSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelNumEventos, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -280,6 +287,10 @@ public class FrmEvento extends javax.swing.JFrame {
                 .addGap(102, 102, 102)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelNumAtracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,10 +298,11 @@ public class FrmEvento extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(8, 8, 8)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelNumAtracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        setSize(new java.awt.Dimension(514, 466));
+        setSize(new java.awt.Dimension(514, 482));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -382,6 +394,15 @@ public class FrmEvento extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
         }
         
+        try {
+            conectaEvento.executaSQL("select count(*) from evento");
+            conectaEvento.rs.first();
+            jLabelNumEventos.setText("O número de eventos é: " + conectaEvento.rs.getNString(1));
+            //JOptionPane.showMessageDialog(rootPane, conecta.rs.getNString(1));
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmEvento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         ModeloTabela modelo = new ModeloTabela(dados,colunas);
         jTableEvento.setModel(modelo);
         jTableEvento.getColumnModel().getColumn(0).setPreferredWidth(105);
@@ -443,6 +464,8 @@ public class FrmEvento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelNumAtracoes;
+    private javax.swing.JLabel jLabelNumEventos;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
