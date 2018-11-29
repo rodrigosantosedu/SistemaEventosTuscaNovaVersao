@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import controle.ConectaBanco;
 import Modelo.ModeloTabela;
 import controle.ControleEvento;
+import javafx.scene.chart.PieChart;
 
 /**
  *
@@ -32,7 +33,7 @@ public class FrmEvento extends javax.swing.JFrame {
     public FrmEvento() {
         initComponents();
         conectaEvento.conexao();
-        PreencherTabela("select *from evento");
+        PreencherTabela("select *from evento order by data desc");
         conectaEvento.executaSQL("select endereco from local");
         jComboBoxLocal.removeAllItems();
         try{
@@ -145,7 +146,6 @@ public class FrmEvento extends javax.swing.JFrame {
 
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/garbage.png"))); // NOI18N
         jButtonDelete.setToolTipText("Apagar");
-        jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -186,6 +186,11 @@ public class FrmEvento extends javax.swing.JFrame {
         jLabel5.setText("Local");
 
         jComboBoxLocal.setEnabled(false);
+        jComboBoxLocal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLocalActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -303,12 +308,13 @@ public class FrmEvento extends javax.swing.JFrame {
         jComboBoxLocal.setEnabled(true);
         jButtonEdit.setEnabled(true);
         jButtonSalvar.setEnabled(true);
-        jButtonDelete.setEnabled(true);
         jButtonNovo.setEnabled(false);
     }//GEN-LAST:event_jButtonNovoActionPerformed
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-        // TODO add your handling code here:
+       
+        
+        PreencherTabela("select *from evento order by data desc");// atualiza tabela após mudança
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonSalvarComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jButtonSalvarComponentMoved
@@ -330,10 +336,13 @@ public class FrmEvento extends javax.swing.JFrame {
         }catch(SQLException ex){
             
         }
+        PreencherTabela("select *from evento order by data desc");
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        conectaEvento.executaSQL("delete from atracao where cnpj='"+jTextFieldData.getText()+"'");
+        
+        conectaEvento.executaSQL("delete from evento where nome='"+jTableEvento.getValueAt(jTableEvento.getSelectedRow(),0)+"'"
+                + " and data='"+jTableEvento.getValueAt(jTableEvento.getSelectedRow(),1)+"'");
         JOptionPane.showMessageDialog(rootPane, "Excluido com Sucesso!\n ");
         jTextFieldData.setText("");
         jTextFieldNome.setText("");
@@ -344,6 +353,8 @@ public class FrmEvento extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(false);
         jButtonDelete.setEnabled(false);
         
+        PreencherTabela("select *from evento order by data desc");//atualiza tabela após mudança
+        
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
@@ -353,6 +364,10 @@ public class FrmEvento extends javax.swing.JFrame {
     private void jTextFieldNumPessoasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumPessoasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNumPessoasActionPerformed
+
+    private void jComboBoxLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLocalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxLocalActionPerformed
     
     public void PreencherTabela(String SQL){
         ArrayList dados = new ArrayList();
@@ -361,7 +376,7 @@ public class FrmEvento extends javax.swing.JFrame {
         try {
             conectaEvento.rs.first();
             do{
-                dados.add(new Object[]{conectaEvento.rs.getString("nome"),conectaEvento.rs.getDate("data"),conectaEvento.rs.getInt("numeropessoas"),conectaEvento.rs.getString("local")});
+                dados.add(new Object[]{conectaEvento.rs.getString("nome"),conectaEvento.rs.getString("data"),conectaEvento.rs.getInt("numeropessoas"),conectaEvento.rs.getString("local")});
             }while(conectaEvento.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");

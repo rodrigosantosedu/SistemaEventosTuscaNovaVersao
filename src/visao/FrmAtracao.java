@@ -105,7 +105,6 @@ public class FrmAtracao extends javax.swing.JFrame {
 
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/garbage.png"))); // NOI18N
         jButtonDelete.setToolTipText("Apagar");
-        jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -225,11 +224,11 @@ public class FrmAtracao extends javax.swing.JFrame {
         jTextFieldNome.setEnabled(true);
         jButtonEdit.setEnabled(true);
         jButtonSalvar.setEnabled(true);
-        jButtonDelete.setEnabled(true);
         jButtonNovo.setEnabled(false);
     }//GEN-LAST:event_jButtonNovoActionPerformed
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
+       PreencherTabela("select *from atracao");//atualiza tabela ao fazer alteração
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonEditActionPerformed
 
@@ -257,10 +256,11 @@ public class FrmAtracao extends javax.swing.JFrame {
         jButtonEdit.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonDelete.setEnabled(false);
+        PreencherTabela("select *from atracao");//atualiza tabela ao fazer alteração
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        conecta.executaSQL("delete from atracao where cnpj='"+jTextFieldCnpj.getText()+"'");
+        conecta.executaSQL("delete from atracao where cnpj='"+jTableAtracao.getValueAt(jTableAtracao.getSelectedRow(),0)+"'");
         JOptionPane.showMessageDialog(rootPane, "Excluido com Sucesso!\n ");
         jTextFieldCnpj.setText("");
         jTextFieldNome.setText("");
@@ -270,6 +270,7 @@ public class FrmAtracao extends javax.swing.JFrame {
         jButtonEdit.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonDelete.setEnabled(false);
+        PreencherTabela("select *from atracao");//atualiza tabela ao fazer alteração
         
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 

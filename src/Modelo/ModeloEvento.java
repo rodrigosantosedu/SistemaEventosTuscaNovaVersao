@@ -6,6 +6,7 @@
 
 package Modelo;
 
+import java.sql.Date;
 import javafx.scene.chart.PieChart;
 
 public class ModeloEvento {

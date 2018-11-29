@@ -249,7 +249,6 @@
               <Image iconType="3" name="/imagens/garbage.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Apagar"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeleteActionPerformed"/>
@@ -310,6 +309,9 @@
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxLocalActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
