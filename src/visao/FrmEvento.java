@@ -6,7 +6,7 @@
 
 package visao;
 
-import Modelo.ModeloEvento;
+import modelo.ModeloEvento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import controle.ConectaBanco;
-import Modelo.ModeloTabela;
+import modelo.ModeloTabela;
 import controle.ControleEvento;
 import javafx.scene.chart.PieChart;
 

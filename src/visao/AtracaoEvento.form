@@ -3,7 +3,7 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="Staf das Atra&#xe7;&#xf5;es"/>
+    <Property name="title" type="java.lang.String" value="Atra&#xe7;&#xf5;es do Evento"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -30,9 +30,9 @@
                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       <Component id="jLabel4" pref="184" max="32767" attributes="0"/>
                       <EmptySpace pref="13" max="32767" attributes="0"/>
-                      <Component id="jComboBoxStaffAtracao" min="-2" pref="319" max="-2" attributes="0"/>
+                      <Component id="jComboBoxAtracaoEvento" min="-2" pref="319" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButtonRefreshStaff" min="-2" pref="41" max="-2" attributes="0"/>
+                      <Component id="jButtonRefreshAtracaoEvento" min="-2" pref="41" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -40,7 +40,7 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="jButtonStaffSair" min="-2" pref="56" max="-2" attributes="0"/>
+                      <Component id="jButtonAtracaoEventoSair" min="-2" pref="56" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -53,13 +53,13 @@
               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jComboBoxStaffAtracao" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="jComboBoxAtracaoEvento" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jButtonRefreshStaff" min="-2" pref="36" max="-2" attributes="0"/>
+                  <Component id="jButtonRefreshAtracaoEvento" min="-2" pref="36" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-              <Component id="jButtonStaffSair" max="32767" attributes="0"/>
+              <Component id="jButtonAtracaoEventoSair" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="252" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -75,7 +75,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTableStaffAtracao">
+        <Component class="javax.swing.JTable" name="jTableAtracaoEvento">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="0" rowCount="4"/>
@@ -90,32 +90,32 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JComboBox" name="jComboBoxStaffAtracao">
+    <Component class="javax.swing.JComboBox" name="jComboBoxAtracaoEvento">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxStaffAtracaoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxAtracaoEventoActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Atra&#xe7;&#xe3;o"/>
+        <Property name="text" type="java.lang.String" value="Evento"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonRefreshStaff">
+    <Component class="javax.swing.JButton" name="jButtonRefreshAtracaoEvento">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/imagens/refresh.png"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRefreshStaffActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRefreshAtracaoEventoActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonStaffSair">
+    <Component class="javax.swing.JButton" name="jButtonAtracaoEventoSair">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/imagens/sign-out.png"/>
@@ -123,7 +123,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Sair"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonStaffSairActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAtracaoEventoSairActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

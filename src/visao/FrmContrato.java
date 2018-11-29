@@ -5,9 +5,9 @@
  */
 package visao;
 
-import Modelo.ModeloContrato;
-import Modelo.ModeloEvento;
-import Modelo.ModeloTabela;
+import modelo.ModeloContrato;
+import modelo.ModeloEvento;
+import modelo.ModeloTabela;
 import controle.ConectaBanco;
 import controle.ControleContrato;
 import java.sql.SQLException;

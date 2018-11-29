@@ -6,7 +6,7 @@
 
 package visao;
 
-import Modelo.ModeloTabela;
+import modelo.ModeloTabela;
 import controle.ConectaBanco;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,14 +25,6 @@ public class StaffAtracao extends javax.swing.JFrame {
     public StaffAtracao() {
         initComponents();
         conectaStaff.conexao();
-        //try {
-         //   PreencherTabela("select nome,funcao,setor,telefone from trabalha "
-         //           + "join staff on staff=pessoa "
-         //           + "join pessoa on pessoa=cpf "
-         //           + "where atracao='""'");
-        //} catch (SQLException ex) {
-        //    Logger.getLogger(StaffAtracao.class.getName()).log(Level.SEVERE, null, ex);
-        //}
         conectaStaff.executaSQL("select *from atracao");
         jComboBoxStaffAtracao.removeAllItems();
         try {
@@ -42,7 +34,8 @@ public class StaffAtracao extends javax.swing.JFrame {
             } while (conectaStaff.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher dropdown eventos" + ex.getMessage());
-        }
+        }     
+      
     }
     
     public void PreencherTabela(String SQL) {
@@ -90,6 +83,7 @@ public class StaffAtracao extends javax.swing.JFrame {
         jComboBoxStaffAtracao = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jButtonRefreshStaff = new javax.swing.JButton();
+        jButtonStaffSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Staf das Atrações");
@@ -122,20 +116,33 @@ public class StaffAtracao extends javax.swing.JFrame {
             }
         });
 
+        jButtonStaffSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/sign-out.png"))); // NOI18N
+        jButtonStaffSair.setToolTipText("Sair");
+        jButtonStaffSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStaffSairActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                         .addComponent(jComboBoxStaffAtracao, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonRefreshStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonRefreshStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonStaffSair, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -147,9 +154,11 @@ public class StaffAtracao extends javax.swing.JFrame {
                         .addComponent(jComboBoxStaffAtracao, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButtonRefreshStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(75, 75, 75)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                .addGap(239, 239, 239))
+                .addGap(29, 29, 29)
+                .addComponent(jButtonStaffSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -163,21 +172,24 @@ public class StaffAtracao extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxStaffAtracaoActionPerformed
 
     private void jButtonRefreshStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshStaffActionPerformed
-        conectaStaff.conexao();
-        conectaStaff.executaSQL("select * from atracao where='"+jComboBoxStaffAtracao.getSelectedItem()+"'");
-        JOptionPane.showMessageDialog(rootPane,jComboBoxStaffAtracao.getSelectedItem());
         try {
+            conectaStaff.conexao();
+            conectaStaff.executaSQL("select * from atracao where NOME='"+jComboBoxStaffAtracao.getSelectedItem()+"'");
             conectaStaff.rs.first();
-            JOptionPane.showMessageDialog(rootPane,conectaStaff.rs.getString("cnpj"));
-        }catch(SQLException ex){
-            
-        }  
-            
-            
-            
-            
+            PreencherTabela("select nome,funcao,setor,telefone from trabalha "
+                    + "join staff on staff=pessoa "
+                   + "join pessoa on pessoa=cpf "
+                   + "where atracao='"+conectaStaff.rs.getString("cnpj")+"'");
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffAtracao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
 // TODO add your handling code here:
     }//GEN-LAST:event_jButtonRefreshStaffActionPerformed
+
+    private void jButtonStaffSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStaffSairActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButtonStaffSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,6 +228,7 @@ public class StaffAtracao extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonRefreshStaff;
+    private javax.swing.JButton jButtonStaffSair;
     private javax.swing.JComboBox jComboBoxStaffAtracao;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;

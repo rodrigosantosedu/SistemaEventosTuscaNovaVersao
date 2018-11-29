@@ -1,7 +1,7 @@
 
 package controle;
 
-import Modelo.ModeloEvento;
+import modelo.ModeloEvento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;

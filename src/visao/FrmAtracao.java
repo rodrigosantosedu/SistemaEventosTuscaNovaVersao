@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import controle.ConectaBanco;
-import Modelo.ModeloTabela;
+import modelo.ModeloTabela;
 
 /**
  *
@@ -72,6 +72,11 @@ public class FrmAtracao extends javax.swing.JFrame {
 
         jTextFieldCnpj.setBackground(new java.awt.Color(254, 254, 254));
         jTextFieldCnpj.setEnabled(false);
+        jTextFieldCnpj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCnpjActionPerformed(evt);
+            }
+        });
 
         jButtonNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
         jButtonNovo.setToolTipText("Novo");
@@ -287,6 +292,10 @@ public class FrmAtracao extends javax.swing.JFrame {
     private void jTextFieldNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNomeActionPerformed
+
+    private void jTextFieldCnpjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCnpjActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldCnpjActionPerformed
     
     public void PreencherTabela(String SQL){
         ArrayList dados = new ArrayList();

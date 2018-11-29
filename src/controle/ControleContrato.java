@@ -1,8 +1,8 @@
 
 package controle;
 
-import Modelo.ModeloContrato;
-import Modelo.ModeloEvento;
+import modelo.ModeloContrato;
+import modelo.ModeloEvento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;

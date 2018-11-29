@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Modelo;
+package modelo;
 
 import java.sql.Date;
 import javafx.scene.chart.PieChart;
