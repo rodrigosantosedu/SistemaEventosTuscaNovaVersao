@@ -14,7 +14,7 @@ public class ConectaBanco {
     private final String usuario = "R10262461";
     private final String senha = "R10262461";
     public Connection conn;//public para acessar em outras classes
-
+    public String error ="ok";
     public void conexao() { // metodo responsavel por realizar a conexao com o banco oracle
         try {
             System.setProperty("jdbc.Drivers", driver);// seta a propriedade do driver de conexao
@@ -31,7 +31,10 @@ public class ConectaBanco {
             stm = conn.createStatement(rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
             rs = stm.executeQuery(sql);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro no ExecutaSQL!\n " + e.getMessage());
+            if(e.getErrorCode()==2292){
+                JOptionPane.showMessageDialog(null, "Esse contrato é referenciado por outros cadastros e não pode ser apagado!");
+                error = "error";
+            }
         }
 
     }
