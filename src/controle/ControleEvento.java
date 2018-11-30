@@ -20,7 +20,10 @@ public class ControleEvento {
             JOptionPane.showMessageDialog(null, "Dados armazenados com sucesso!");
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro na inserção dos dados!\n ERRO!" +ex.getMessage());
+            if(ex.getErrorCode() == 1){
+                
+            }
+            JOptionPane.showMessageDialog(null, "Esse Evento já foi cadastrado com essa data anteriormente!\nSendo assim, você já o encontra dentro do sistema!");
         }
         
     }

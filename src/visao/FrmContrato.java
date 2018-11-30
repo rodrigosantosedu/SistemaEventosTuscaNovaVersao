@@ -39,7 +39,6 @@ public class FrmContrato extends javax.swing.JFrame {
                 jComboBoxEvento.addItem(combinadata);
             } while (conectaContrato.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher dropdown de atrações" + ex.getMessage());
         }
 
         conectaContrato.executaSQL("select *from atracao");
@@ -50,7 +49,6 @@ public class FrmContrato extends javax.swing.JFrame {
                 jComboBoxAtracao.addItem(conectaContrato.rs.getString("nome"));
             } while (conectaContrato.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher dropdown eventos" + ex.getMessage());
         }
 
     }
@@ -65,7 +63,6 @@ public class FrmContrato extends javax.swing.JFrame {
                 dados.add(new Object[]{conectaContrato.rs.getString("NOME"), conectaContrato.rs.getString("EVENTONOME"), conectaContrato.rs.getString("EVENTODATA"), conectaContrato.rs.getString("VALORCACHE")});
             } while (conectaContrato.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
         }
         try {
             conectaContrato.executaSQL("select count(*) from contrato");
@@ -73,18 +70,13 @@ public class FrmContrato extends javax.swing.JFrame {
             jLabelNumContratos.setText("O número de contratos é: " + conectaContrato.rs.getNString(1));
             //JOptionPane.showMessageDialog(rootPane, conecta.rs.getNString(1));
         } catch (SQLException ex) {
-            Logger.getLogger(FrmContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableContrato.setModel(modelo);
         jTableContrato.getColumnModel().getColumn(0).setPreferredWidth(125);
-        //jTableContrato.getColumnModel().getColumn(0).setResizable(false);
         jTableContrato.getColumnModel().getColumn(1).setPreferredWidth(125);
-        // jTableContrato.getColumnModel().getColumn(1).setResizable(false);
         jTableContrato.getColumnModel().getColumn(2).setPreferredWidth(125);
-        // jTableContrato.getColumnModel().getColumn(2).setResizable(false);
         jTableContrato.getColumnModel().getColumn(3).setPreferredWidth(125);
-        // jTableContrato.getColumnModel().getColumn(3).setResizable(false);
         jTableContrato.getTableHeader().setReorderingAllowed(false);
         jTableContrato.setAutoResizeMode(jTableContrato.AUTO_RESIZE_OFF);
         jTableContrato.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -130,6 +122,11 @@ public class FrmContrato extends javax.swing.JFrame {
 
             }
         ));
+        jTableContrato.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableContratoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableContrato);
 
         jLabel5.setText("Atração");
@@ -191,6 +188,12 @@ public class FrmContrato extends javax.swing.JFrame {
 
         jButtonContratoDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/garbage.png"))); // NOI18N
         jButtonContratoDelete.setToolTipText("Apagar");
+        jButtonContratoDelete.setEnabled(false);
+        jButtonContratoDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonContratoDeleteMouseClicked(evt);
+            }
+        });
         jButtonContratoDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonContratoDeleteActionPerformed(evt);
@@ -317,7 +320,6 @@ public class FrmContrato extends javax.swing.JFrame {
                 jComboBoxEvento.addItem(combinadata);
             } while (conectaContrato.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher dropdown de atrações" + ex.getMessage());
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonRefreshEventoActionPerformed
@@ -337,7 +339,7 @@ public class FrmContrato extends javax.swing.JFrame {
             conectaContrato.rs.first();
             contrato.setAtracao(conectaContrato.rs.getNString("cnpj"));
         } catch (SQLException ex) {
-            Logger.getLogger(FrmContrato.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(rootPane, ex.getErrorCode());
         }
 
         concatenada = (String) jComboBoxEvento.getSelectedItem();
@@ -365,7 +367,6 @@ public class FrmContrato extends javax.swing.JFrame {
                 jComboBoxAtracao.addItem(conectaContrato.rs.getString("nome"));
             } while (conectaContrato.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao preencher dropdown eventos" + ex.getMessage());
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonRefreshAtracaoActionPerformed
@@ -390,6 +391,14 @@ public class FrmContrato extends javax.swing.JFrame {
         dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonContratoSairActionPerformed
+
+    private void jButtonContratoDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonContratoDeleteMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonContratoDeleteMouseClicked
+
+    private void jTableContratoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContratoMouseClicked
+       jButtonContratoDelete.setEnabled(true);
+    }//GEN-LAST:event_jTableContratoMouseClicked
 
     /**
      * @param args the command line arguments

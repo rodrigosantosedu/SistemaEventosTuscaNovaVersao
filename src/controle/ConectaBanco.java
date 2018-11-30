@@ -19,20 +19,19 @@ public class ConectaBanco {
         try {
             System.setProperty("jdbc.Drivers", driver);// seta a propriedade do driver de conexao
             conn = DriverManager.getConnection(caminho, usuario, senha);// realiza conexao
-            //JOptionPane.showMessageDialog(null, "conectado com sucesso");
-        } catch (SQLException ex) { // caso de "ruim" na conexao entra aqui
-            JOptionPane.showMessageDialog(null, "erro de conexao!\n ");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Houve um erro de conexão com o banco de dados!\nTente Novamente! ");
             Logger.getLogger(ConectaBanco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void executaSQL(String sql) {
+    public void executaSQL(String sql) {// esse método serve para executar strings sql 
         try {
             stm = conn.createStatement(rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
             rs = stm.executeQuery(sql);
         } catch (SQLException e) {
             if(e.getErrorCode()==2292){
-                JOptionPane.showMessageDialog(null, "Esse contrato é referenciado por outros cadastros e não pode ser apagado!");
+                JOptionPane.showMessageDialog(null, "Esse linha é referenciada por outros cadastros e não pode ser apagado!");
                 error = "error";
             }
         }
@@ -42,9 +41,7 @@ public class ConectaBanco {
     public void desconecta() {// esse metodo serve para desconectar o banco
         try {
             conn.close();
-            JOptionPane.showMessageDialog(null, "Desconectado com sucesso!\n ");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "erro ao fechar a conexao!\n ");
         }
     }
 

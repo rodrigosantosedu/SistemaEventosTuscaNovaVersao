@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package visao;
 
 import modelo.ModeloTabela;
@@ -22,6 +21,7 @@ import javax.swing.ListSelectionModel;
 public class StaffAtracao extends javax.swing.JFrame {
 
     ConectaBanco conectaStaff = new ConectaBanco();
+
     public StaffAtracao() {
         initComponents();
         conectaStaff.conexao();
@@ -34,10 +34,10 @@ public class StaffAtracao extends javax.swing.JFrame {
             } while (conectaStaff.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher dropdown eventos" + ex.getMessage());
-        }     
-      
+        }
+
     }
-    
+
     public void PreencherTabela(String SQL) {
         ArrayList dados = new ArrayList();
         String[] colunas = new String[]{"Nome", "Funcao", "Setor", "Telefone"}; // aqui são os nomes que irão aparecer nas colunas da tabela
@@ -48,26 +48,22 @@ public class StaffAtracao extends javax.swing.JFrame {
                 dados.add(new Object[]{conectaStaff.rs.getString("NOME"), conectaStaff.rs.getString("FUNCAO"), conectaStaff.rs.getString("SETOR"), conectaStaff.rs.getString("TELEFONE")});
             } while (conectaStaff.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
+
+            if (ex.getErrorCode() == 17011) {
+                JOptionPane.showMessageDialog(rootPane, "Essa atração não possui equipe!\n ");
+            }
         }
-        
+
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
         jTableStaffAtracao.setModel(modelo);
         jTableStaffAtracao.getColumnModel().getColumn(0).setPreferredWidth(125);
-        //jTableContrato.getColumnModel().getColumn(0).setResizable(false);
         jTableStaffAtracao.getColumnModel().getColumn(1).setPreferredWidth(125);
-        // jTableContrato.getColumnModel().getColumn(1).setResizable(false);
         jTableStaffAtracao.getColumnModel().getColumn(2).setPreferredWidth(125);
-        // jTableContrato.getColumnModel().getColumn(2).setResizable(false);
         jTableStaffAtracao.getColumnModel().getColumn(3).setPreferredWidth(125);
-        // jTableContrato.getColumnModel().getColumn(3).setResizable(false);
         jTableStaffAtracao.getTableHeader().setReorderingAllowed(false);
         jTableStaffAtracao.setAutoResizeMode(jTableStaffAtracao.AUTO_RESIZE_OFF);
         jTableStaffAtracao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -166,34 +162,26 @@ public class StaffAtracao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxStaffAtracaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxStaffAtracaoActionPerformed
-      
 
-// TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxStaffAtracaoActionPerformed
 
     private void jButtonRefreshStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshStaffActionPerformed
         try {
             conectaStaff.conexao();
-            conectaStaff.executaSQL("select * from atracao where NOME='"+jComboBoxStaffAtracao.getSelectedItem()+"'");
+            conectaStaff.executaSQL("select * from atracao where NOME='" + jComboBoxStaffAtracao.getSelectedItem() + "'");
             conectaStaff.rs.first();
             PreencherTabela("select nome,funcao,setor,telefone from trabalha "
                     + "join staff on staff=pessoa "
-                   + "join pessoa on pessoa=cpf "
-                   + "where atracao='"+conectaStaff.rs.getString("cnpj")+"'");
+                    + "join pessoa on pessoa=cpf "
+                    + "where atracao='" + conectaStaff.rs.getString("cnpj") + "'");
         } catch (SQLException ex) {
-            Logger.getLogger(StaffAtracao.class.getName()).log(Level.SEVERE, null, ex);
         }
-             
-// TODO add your handling code here:
     }//GEN-LAST:event_jButtonRefreshStaffActionPerformed
 
     private void jButtonStaffSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStaffSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonStaffSairActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

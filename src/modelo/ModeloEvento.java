@@ -26,7 +26,7 @@ public class ModeloEvento {
      * @param nome the nome to set
      */
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = nome.toUpperCase();
     }
 
     /**
@@ -40,7 +40,7 @@ public class ModeloEvento {
      * @param data the data to set
      */
     public void setData(String data) {
-        this.data = data;
+        this.data = data.toUpperCase();
     }
 
     /**
@@ -54,7 +54,7 @@ public class ModeloEvento {
      * @param local the local to set
      */
     public void setLocal(String local) {
-        this.local = local;
+        this.local = local.toUpperCase();
     }
 
     /**
@@ -68,7 +68,7 @@ public class ModeloEvento {
      * @param numero_pessoas the numero_pessoas to set
      */
     public void setNumero_pessoas(String numero_pessoas) {
-        this.numero_pessoas = numero_pessoas;
+        this.numero_pessoas = numero_pessoas.toUpperCase();
     }
 
     

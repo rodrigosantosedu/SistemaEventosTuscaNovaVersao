@@ -45,7 +45,6 @@ public class FrmAtracao extends javax.swing.JFrame {
         jTextFieldCnpj = new javax.swing.JTextField();
         jButtonNovo = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
-        jButtonEdit = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -100,17 +99,9 @@ public class FrmAtracao extends javax.swing.JFrame {
             }
         });
 
-        jButtonEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/resume.png"))); // NOI18N
-        jButtonEdit.setToolTipText("Editar");
-        jButtonEdit.setEnabled(false);
-        jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditActionPerformed(evt);
-            }
-        });
-
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/garbage.png"))); // NOI18N
         jButtonDelete.setToolTipText("Apagar");
+        jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -136,6 +127,11 @@ public class FrmAtracao extends javax.swing.JFrame {
 
             }
         ));
+        jTableAtracao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableAtracaoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableAtracao);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -158,8 +154,6 @@ public class FrmAtracao extends javax.swing.JFrame {
                                     .addComponent(jTextFieldCnpj)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(14, 14, 14)
-                                        .addComponent(jButtonEdit)
                                         .addGap(18, 18, 18)
                                         .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -189,7 +183,6 @@ public class FrmAtracao extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonNovo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -234,42 +227,39 @@ public class FrmAtracao extends javax.swing.JFrame {
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         conecta.executaSQL("delete from atracao where cnpj='"+jTableAtracao.getValueAt(jTableAtracao.getSelectedRow(),0)+"'");
-        JOptionPane.showMessageDialog(rootPane, "Excluido com Sucesso!\n ");
         jTextFieldCnpj.setText("");
         jTextFieldNome.setText("");
         jTextFieldCnpj.setEnabled(false);
         jTextFieldNome.setEnabled(false);
         jButtonNovo.setEnabled(true);
-        jButtonEdit.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonDelete.setEnabled(false);
         PreencherTabela("select *from atracao");//atualiza tabela ao fazer alteração
 
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
-    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-        PreencherTabela("select *from atracao");//atualiza tabela ao fazer alteração
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonEditActionPerformed
-
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
 
         try {
             //prepara a query sql
             PreparedStatement pst = conecta.conn.prepareStatement("insert into atracao(CNPJ,NOME)values(?,?)");
-            pst.setString(1, jTextFieldCnpj.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
-            pst.setString(2, jTextFieldNome.getText());//pega os valores dos formularios e mostra a coluna da tabela para inserção
+            pst.setString(1, jTextFieldCnpj.getText().toUpperCase());//pega os valores dos formularios e mostra a coluna da tabela para inserção
+            pst.setString(2, jTextFieldNome.getText().toUpperCase());//pega os valores dos formularios e mostra a coluna da tabela para inserção
             pst.executeUpdate(); // da o "Commit" , olhar depois se é isso mesmo
-            JOptionPane.showMessageDialog(rootPane, "Salvo com Sucesso!\n ");
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(rootPane, "erro ao fazer inserção!\n ");
+            if(ex.getErrorCode() == 1400){
+                JOptionPane.showMessageDialog(rootPane, "Os Campos são Obrigatórios");
+            }
+            
+            if(ex.getErrorCode() == 1){
+                JOptionPane.showMessageDialog(rootPane, "Essa atração já foi inserida!\nVerifique o nome e o cnpj!");
+            }   
         }
         jTextFieldCnpj.setText("");
         jTextFieldNome.setText("");
         jTextFieldCnpj.setEnabled(false);
         jTextFieldNome.setEnabled(false);
         jButtonNovo.setEnabled(true);
-        jButtonEdit.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonDelete.setEnabled(false);
         PreencherTabela("select *from atracao");//atualiza tabela ao fazer alteração
@@ -284,7 +274,6 @@ public class FrmAtracao extends javax.swing.JFrame {
         jTextFieldNome.setText("");
         jTextFieldCnpj.setEnabled(true);
         jTextFieldNome.setEnabled(true);
-        jButtonEdit.setEnabled(true);
         jButtonSalvar.setEnabled(true);
         jButtonNovo.setEnabled(false);
     }//GEN-LAST:event_jButtonNovoActionPerformed
@@ -296,6 +285,10 @@ public class FrmAtracao extends javax.swing.JFrame {
     private void jTextFieldCnpjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCnpjActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldCnpjActionPerformed
+
+    private void jTableAtracaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAtracaoMouseClicked
+       jButtonDelete.setEnabled(true);
+    }//GEN-LAST:event_jTableAtracaoMouseClicked
     
     public void PreencherTabela(String SQL){
         ArrayList dados = new ArrayList();
@@ -314,13 +307,8 @@ public class FrmAtracao extends javax.swing.JFrame {
             conecta.executaSQL("select count(*) from atracao");
             conecta.rs.first();
             jLabelNumAtracoes.setText("O número de atrações é:" + conecta.rs.getNString(1));
-            //JOptionPane.showMessageDialog(rootPane, conecta.rs.getNString(1));
         } catch (SQLException ex) {
-            Logger.getLogger(FrmAtracao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
         ModeloTabela modelo = new ModeloTabela(dados,colunas);
         jTableAtracao.setModel(modelo);
         jTableAtracao.getColumnModel().getColumn(0).setPreferredWidth(217);
@@ -368,7 +356,6 @@ public class FrmAtracao extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDelete;
-    private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonNovo;
     private javax.swing.JButton jButtonSair;
     private javax.swing.JButton jButtonSalvar;

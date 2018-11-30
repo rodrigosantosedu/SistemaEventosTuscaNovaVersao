@@ -7,22 +7,13 @@
 package visao;
 
 import modelo.ModeloEvento;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 import controle.ConectaBanco;
 import modelo.ModeloTabela;
 import controle.ControleEvento;
-import javafx.scene.chart.PieChart;
 
 /**
  *
@@ -42,7 +33,6 @@ public class FrmEvento extends javax.swing.JFrame {
                 jComboBoxLocal.addItem(conectaEvento.rs.getString("endereco"));
             }while(conectaEvento.rs.next());
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(rootPane,"Erro ao preencher dropdown enderecos"+ex.getMessage());
         }
     }
 
@@ -75,7 +65,6 @@ public class FrmEvento extends javax.swing.JFrame {
         }
         jButtonNovo = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
-        jButtonEdit = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -137,17 +126,9 @@ public class FrmEvento extends javax.swing.JFrame {
             }
         });
 
-        jButtonEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/resume.png"))); // NOI18N
-        jButtonEdit.setToolTipText("Editar");
-        jButtonEdit.setEnabled(false);
-        jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditActionPerformed(evt);
-            }
-        });
-
         jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/garbage.png"))); // NOI18N
         jButtonDelete.setToolTipText("Apagar");
+        jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -173,6 +154,11 @@ public class FrmEvento extends javax.swing.JFrame {
 
             }
         ));
+        jTableEvento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableEventoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableEvento);
 
         jLabel4.setText("Número de Pessoas");
@@ -205,8 +191,6 @@ public class FrmEvento extends javax.swing.JFrame {
                         .addComponent(jButtonNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -261,7 +245,6 @@ public class FrmEvento extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonSalvar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonNovo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -318,16 +301,9 @@ public class FrmEvento extends javax.swing.JFrame {
         jTextFieldNome.setEnabled(true);
         jTextFieldNumPessoas.setEnabled(true);
         jComboBoxLocal.setEnabled(true);
-        jButtonEdit.setEnabled(true);
         jButtonSalvar.setEnabled(true);
         jButtonNovo.setEnabled(false);
     }//GEN-LAST:event_jButtonNovoActionPerformed
-
-    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-       
-        
-        PreencherTabela("select *from evento order by data desc");// atualiza tabela após mudança
-    }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonSalvarComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jButtonSalvarComponentMoved
         // TODO add your handling code here:
@@ -346,7 +322,6 @@ public class FrmEvento extends javax.swing.JFrame {
             ControleEvento control_evento = new ControleEvento();
             control_evento.InserirEvento(evento);
         }catch(SQLException ex){
-            
         }
         PreencherTabela("select *from evento order by data desc");
     }//GEN-LAST:event_jButtonSalvarActionPerformed
@@ -361,7 +336,6 @@ public class FrmEvento extends javax.swing.JFrame {
         jTextFieldData.setEnabled(false);
         jTextFieldNome.setEnabled(false);
         jButtonNovo.setEnabled(true);
-        jButtonEdit.setEnabled(false);
         jButtonSalvar.setEnabled(false);
         jButtonDelete.setEnabled(false);
         
@@ -380,6 +354,11 @@ public class FrmEvento extends javax.swing.JFrame {
     private void jComboBoxLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLocalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxLocalActionPerformed
+
+    private void jTableEventoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEventoMouseClicked
+        jButtonDelete.setEnabled(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTableEventoMouseClicked
     
     public void PreencherTabela(String SQL){
         ArrayList dados = new ArrayList();
@@ -391,7 +370,6 @@ public class FrmEvento extends javax.swing.JFrame {
                 dados.add(new Object[]{conectaEvento.rs.getString("nome"),conectaEvento.rs.getString("data"),conectaEvento.rs.getInt("numeropessoas"),conectaEvento.rs.getString("local")});
             }while(conectaEvento.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao Prencher o ArrayList!\n ");
         }
         
         try {
@@ -400,7 +378,6 @@ public class FrmEvento extends javax.swing.JFrame {
             jLabelNumEventos.setText("O número de eventos é: " + conectaEvento.rs.getNString(1));
             //JOptionPane.showMessageDialog(rootPane, conecta.rs.getNString(1));
         } catch (SQLException ex) {
-            Logger.getLogger(FrmEvento.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         ModeloTabela modelo = new ModeloTabela(dados,colunas);
@@ -454,7 +431,6 @@ public class FrmEvento extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDelete;
-    private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonNovo;
     private javax.swing.JButton jButtonSair;
     private javax.swing.JButton jButtonSalvar;

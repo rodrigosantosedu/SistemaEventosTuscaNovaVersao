@@ -21,7 +21,13 @@ public class ControleContrato {
             JOptionPane.showMessageDialog(null, "Dados armazenados com sucesso!");
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro na inserção dos dados!\n ERRO!" +ex.getMessage());
+            if(ex.getErrorCode() == 1400){
+                JOptionPane.showMessageDialog(null, "O Campo cache é obrigatório!\nCaso o show seja gratuito, insira o número 0!");                
+            }
+            
+            if(ex.getErrorCode() == 1){
+                JOptionPane.showMessageDialog(null, "Esse contrato já se encontra no sistema!");                
+            }
         }
         
     }

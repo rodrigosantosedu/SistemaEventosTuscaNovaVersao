@@ -27,7 +27,7 @@ public class ModeloContrato {
      * @param atracao the atracao to set
      */
     public void setAtracao(String atracao) {
-        this.atracao = atracao;
+        this.atracao = atracao.toUpperCase();
     }
 
     /**
@@ -41,7 +41,7 @@ public class ModeloContrato {
      * @param eventonome the eventonome to set
      */
     public void setEventonome(String eventonome) {
-        this.eventonome = eventonome;
+        this.eventonome = eventonome.toUpperCase();
     }
 
     /**
@@ -55,7 +55,7 @@ public class ModeloContrato {
      * @param eventodata the eventodata to set
      */
     public void setEventodata(String eventodata) {
-        this.eventodata = eventodata;
+        this.eventodata = eventodata.toUpperCase();
     }
 
     /**
@@ -69,9 +69,6 @@ public class ModeloContrato {
      * @param valorcache the valorcache to set
      */
     public void setValorcache(String valorcache) {
-        this.valorcache = valorcache;
+        this.valorcache = valorcache.toUpperCase();
     }
-    
-    
-    
 }
